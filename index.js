@@ -5,6 +5,7 @@ const path = require('path')
 const ejs = require('ejs')
 const mongoose = require('mongoose')
 const { MongoClient } = require('mongodb')
+const blogPost = require('./models/blogPosts')
 
 
 mongoose.connect('mongodb://localhost/my_database')
@@ -23,10 +24,13 @@ MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, fu
 app.set('view engine', 'ejs')
 
 app.use(express.static('public'))
+app.use(express.json())
+app.use(express.urlencoded())
 
-app.get('/', (req, res) => {
-    //    res.sendFile(path.join(__dirname + '/pages/index.html'));
-    res.render('index')
+app.get('/', async(req, res) => {
+    const blogposts = await blogPost.find({})
+    console.log(blogposts)
+    res.render('index', { blogposts })
 })
 
 app.get('/contact', (req, res) => {
@@ -39,6 +43,15 @@ app.get('/about', (req, res) => {
 
 app.get('/post', (req, res) => {
     res.render('post')
+})
+
+app.get('/posts/new', (req, res) => {
+    res.render('create')
+})
+
+app.post('/posts/store', async(req, res) => {
+    await blogPost.create(req.body);
+    res.redirect('/')
 })
 
 
