@@ -10,7 +10,8 @@ const blogPostSchema = new Schema({
     meta: {
         votes: Number,
         favs: Number
-    }
+    },
+    image: String
 });
 
 const blogPost = mongoose.model('blogPost', blogPostSchema);
