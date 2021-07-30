@@ -15,7 +15,6 @@ const multer = require('multer')
     //const bp = require('body-parser')
 
 
-
 mongoose.connect('mongodb://localhost/my_database')
 
 const url = 'mongodb://localhost/my_database'
@@ -29,7 +28,7 @@ MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, fu
     }
 })
 
-/*const storage = multer.diskStorage({
+const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, './public/img')
     },
@@ -37,7 +36,7 @@ MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, fu
         cb(null, file.originalname)
     }
 })
-const upload = multer({ storage: storage })*/
+const upload = multer({ storage: storage })
 
 // Set middlewares
 
@@ -91,7 +90,7 @@ app.post('/posts/store', (req, res) => {
 app.post('/posts/store', imageUpload.array('image'), async(req, res) => {
     await blogPost.create({
         ...req.body,
-        image: '/img/' + image.name
+        image: '/img' + imageUpload.name
     })
     res.redirect('/')
 })
